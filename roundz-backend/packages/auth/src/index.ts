@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync, FastifyRequest } from 'fastify';
+import type { SignOptions } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 import { AppError } from '@roundz/errors';
 
@@ -11,7 +12,7 @@ export type AuthTokenPayload = {
 export class JwtTokenService {
   constructor(
     private readonly secret: string,
-    private readonly expiresIn: string = '15m',
+    private readonly expiresIn: SignOptions['expiresIn'] = '15m',
   ) {}
 
   sign(payload: AuthTokenPayload) {

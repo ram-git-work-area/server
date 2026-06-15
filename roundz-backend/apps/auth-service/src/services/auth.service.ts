@@ -1,4 +1,4 @@
-import { JwtTokenService } from '@roundz/auth';
+import type { JwtTokenService } from '@roundz/auth';
 import { validate } from '@roundz/validation';
 import {
   loginResponseSchema,

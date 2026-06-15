@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { type ConnectOptions } from 'mongoose';
 
 export async function connectMongo(mongoUrl: string) {
   mongoose.set('strictQuery', true);
@@ -7,10 +7,12 @@ export async function connectMongo(mongoUrl: string) {
     return mongoose.connection;
   }
 
-  await mongoose.connect(mongoUrl, {
+  const options: ConnectOptions = {
     serverSelectionTimeoutMS: 5000,
     maxPoolSize: 20,
-  });
+  };
+
+  await mongoose.connect(mongoUrl, options);
 
   return mongoose.connection;
 }

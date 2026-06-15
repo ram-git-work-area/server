@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { GatewayService } from '../services/gateway.service';
+import type { GatewayService } from '../services/gateway.service';
 
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}

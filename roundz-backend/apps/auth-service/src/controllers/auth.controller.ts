@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { validate } from '@roundz/validation';
 import { loginRequestSchema } from '../schemas/login.schema';
-import { AuthService } from '../services/auth.service';
+import type { AuthService } from '../services/auth.service';
 
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

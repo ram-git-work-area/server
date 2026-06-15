@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { validate } from '@roundz/validation';
 import { healthResponseSchema } from '../schemas/health.schema';
-import { HealthService } from '../services/health.service';
+import type { HealthService } from '../services/health.service';
 
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
