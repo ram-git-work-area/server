@@ -22,6 +22,15 @@ const envSchema = z.object({
         .filter(Boolean),
     ),
   JWT_SECRET: z.string().min(16).default('local-development-jwt-secret-change-me'),
+  JWT_ACCESS_TOKEN_EXPIRES_IN: z.string().min(1).default('15m'),
+  JWT_REFRESH_TOKEN_EXPIRES_IN: z.string().min(1).default('30d'),
+  JWT_ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().default(900),
+  JWT_REFRESH_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().default(2592000),
+  AUTH_LOGIN_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(5),
+  AUTH_LOGIN_RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().positive().default(900),
+  AUTH_OTP_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(3),
+  AUTH_OTP_RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().positive().default(3600),
+  AUTH_OTP_TTL_SECONDS: z.coerce.number().int().positive().default(300),
   CLOUD_PROVIDER: z.enum(['aws', 'gcp', 'azure', 'local']).default('aws'),
   STORAGE_PROVIDER: z.enum(['s3', 'gcs', 'azure-blob', 'local']).default('s3'),
   PAYMENT_PROVIDER: z.enum(['razorpay', 'stripe', 'mock']).default('razorpay'),
@@ -44,6 +53,15 @@ export type RoundzConfig = {
   redisUrl: string;
   kafkaBrokers: string[];
   jwtSecret: string;
+  jwtAccessTokenExpiresIn: string;
+  jwtRefreshTokenExpiresIn: string;
+  jwtAccessTokenTtlSeconds: number;
+  jwtRefreshTokenTtlSeconds: number;
+  authLoginRateLimitMax: number;
+  authLoginRateLimitWindowSeconds: number;
+  authOtpRateLimitMax: number;
+  authOtpRateLimitWindowSeconds: number;
+  authOtpTtlSeconds: number;
   cloudProvider: CloudProvider;
   storageProvider: StorageProvider;
   paymentProvider: PaymentProvider;
@@ -74,6 +92,15 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
     redisUrl: parsed.REDIS_URL,
     kafkaBrokers: parsed.KAFKA_BROKERS,
     jwtSecret: parsed.JWT_SECRET,
+    jwtAccessTokenExpiresIn: parsed.JWT_ACCESS_TOKEN_EXPIRES_IN,
+    jwtRefreshTokenExpiresIn: parsed.JWT_REFRESH_TOKEN_EXPIRES_IN,
+    jwtAccessTokenTtlSeconds: parsed.JWT_ACCESS_TOKEN_TTL_SECONDS,
+    jwtRefreshTokenTtlSeconds: parsed.JWT_REFRESH_TOKEN_TTL_SECONDS,
+    authLoginRateLimitMax: parsed.AUTH_LOGIN_RATE_LIMIT_MAX,
+    authLoginRateLimitWindowSeconds: parsed.AUTH_LOGIN_RATE_LIMIT_WINDOW_SECONDS,
+    authOtpRateLimitMax: parsed.AUTH_OTP_RATE_LIMIT_MAX,
+    authOtpRateLimitWindowSeconds: parsed.AUTH_OTP_RATE_LIMIT_WINDOW_SECONDS,
+    authOtpTtlSeconds: parsed.AUTH_OTP_TTL_SECONDS,
     cloudProvider: parsed.CLOUD_PROVIDER,
     storageProvider: parsed.STORAGE_PROVIDER,
     paymentProvider: parsed.PAYMENT_PROVIDER,
