@@ -44,7 +44,7 @@ export class AuthController {
   async requestOtp(request: FastifyRequest, reply: FastifyReply) {
     const body = validate(otpRequestSchema, request.body);
     const response = await this.authService.requestOtp(body, toContext(request));
-    return reply.accepted().send(response);
+    return reply.code(202).send(response);
   }
 
   async verifyOtp(request: FastifyRequest, reply: FastifyReply) {
@@ -69,7 +69,7 @@ export class AuthController {
   async forgotPassword(request: FastifyRequest, reply: FastifyReply) {
     const body = validate(forgotPasswordRequestSchema, request.body);
     const response = await this.authService.forgotPassword(body);
-    return reply.accepted().send(response);
+    return reply.code(202).send(response);
   }
 
   async verifyEmail(request: FastifyRequest, reply: FastifyReply) {

@@ -1,10 +1,11 @@
-import { KafkaProducerClient, KafkaTopics } from '@roundz/kafka';
+import { KafkaProducerClient } from '@roundz/kafka';
+import type { KafkaTopic } from '@roundz/kafka';
 
 export type AuthEventName =
-  | typeof KafkaTopics.AuthUserRegistered
-  | typeof KafkaTopics.AuthUserLoggedIn
-  | typeof KafkaTopics.AuthOtpRequested
-  | typeof KafkaTopics.AuthPasswordChanged;
+  | Extract<KafkaTopic, 'auth.user_registered'>
+  | Extract<KafkaTopic, 'auth.user_logged_in'>
+  | Extract<KafkaTopic, 'auth.otp_requested'>
+  | Extract<KafkaTopic, 'auth.password_changed'>;
 
 export type AuthEventPublisher = {
   publish<TPayload extends Record<string, unknown>>(

@@ -12,7 +12,6 @@ import type {
 import type { SignOptions } from 'jsonwebtoken';
 import { describe, expect, it, vi } from 'vitest';
 import { assertRole, hashToken } from '@roundz/auth';
-import { AppError } from '@roundz/errors';
 import type {
   AuthRepositoryPort,
   CreateLoginAttemptInput,
@@ -141,7 +140,7 @@ describe('role guard', () => {
     ).not.toThrow();
     expect(() =>
       assertRole({ sub: 'customer-user', role: 'CUSTOMER', type: 'access' }, ['ADMIN']),
-    ).toThrow(AppError);
+    ).toThrow('Forbidden');
   });
 });
 

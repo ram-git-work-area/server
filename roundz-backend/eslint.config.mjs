@@ -11,7 +11,9 @@ export default [
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        projectService: {
+          allowDefaultProject: ['apps/auth-service/tests/*.ts'],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },

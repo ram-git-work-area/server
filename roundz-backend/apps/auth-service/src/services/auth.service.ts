@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import argon2 from 'argon2';
 import type { SignOptions } from 'jsonwebtoken';
-import { OtpPurpose, type User } from '@prisma/client';
+import type { OtpPurpose, User } from '@prisma/client';
 import {
   hashToken,
   signAccessToken,
@@ -97,6 +97,11 @@ export class AuthService {
 
   async login(input: LoginRequest, context: AuthRequestContext): Promise<AuthResponse> {
     const email = normalizeEmail(input.email);
+
+    if (!email) {
+      throw invalidLoginError();
+    }
+
     await this.options.rateLimiter.assertAllowed({
       key: `auth:login:${email}:${context.ipAddress ?? 'unknown'}`,
       limit: this.options.loginRateLimitMax,
@@ -436,7 +441,7 @@ export class AuthService {
   private parseRefreshToken(refreshToken: string) {
     try {
       return verifyRefreshToken(refreshToken, this.options.jwtSecret);
-    } catch (_error) {
+    } catch {
       throw new AppError('Invalid refresh token', 401, 'AUTH_REFRESH_TOKEN_INVALID');
     }
   }

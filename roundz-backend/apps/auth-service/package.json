@@ -9,7 +9,7 @@
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "clean": "rimraf dist",
-    "test": "vitest run tests/**/*.test.ts"
+    "test": "vitest run"
   },
   "dependencies": {
     "@roundz/auth": "*",
