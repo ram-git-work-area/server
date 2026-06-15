@@ -1,0 +1,41 @@
+{
+  "name": "roundz-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Production-grade Node.js Fastify backend base for Roundz.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "clean": "rimraf \"apps/*/dist\" \"packages/*/dist\"",
+    "dev:gateway": "tsx watch apps/api-gateway/src/server.ts",
+    "dev:auth": "tsx watch apps/auth-service/src/server.ts",
+    "docker:local": "docker compose -f infra/docker/docker-compose.yml up -d",
+    "docker:local:down": "docker compose -f infra/docker/docker-compose.yml down",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test --workspaces --if-present",
+    "prisma:generate": "prisma generate --schema packages/database/prisma/schema.prisma",
+    "prisma:migrate:dev": "prisma migrate dev --schema packages/database/prisma/schema.prisma"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.9.3",
+    "eslint": "^10.5.0",
+    "prettier": "^3.8.4",
+    "prisma": "^6.19.3",
+    "rimraf": "^6.1.3",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0"
+  }
+}

@@ -1,0 +1,35 @@
+namespace: roundz
+imageRegistry: roundz
+cloudProvider: aws
+storageProvider: s3
+paymentProvider: razorpay
+pushProvider: fcm
+
+services:
+  api-gateway:
+    port: 3000
+    replicas: 2
+  auth-service:
+    port: 3001
+    replicas: 2
+  user-service:
+    port: 3002
+    replicas: 2
+  rider-service:
+    port: 3003
+    replicas: 2
+  trip-service:
+    port: 3004
+    replicas: 2
+  wallet-service:
+    port: 3005
+    replicas: 2
+  notification-service:
+    port: 3006
+    replicas: 2
+  location-service:
+    port: 3007
+    replicas: 2
+  admin-service:
+    port: 3008
+    replicas: 1

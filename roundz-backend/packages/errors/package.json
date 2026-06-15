@@ -1,0 +1,15 @@
+{
+  "name": "@roundz/errors",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rimraf dist",
+    "test": "echo \"No tests configured for @roundz/errors yet\""
+  },
+  "dependencies": {
+    "fastify": "^5.8.5"
+  }
+}

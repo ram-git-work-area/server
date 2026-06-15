@@ -1,0 +1,27 @@
+{
+  "name": "@roundz/api-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/server.js",
+  "types": "dist/server.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
+    "clean": "rimraf dist",
+    "test": "echo \"No tests configured for @roundz/api-gateway yet\""
+  },
+  "dependencies": {
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^6.0.0",
+    "@roundz/common": "*",
+    "@roundz/config": "*",
+    "@roundz/database": "*",
+    "@roundz/errors": "*",
+    "@roundz/kafka": "*",
+    "@roundz/logger": "*",
+    "@roundz/redis": "*",
+    "@roundz/validation": "*",
+    "fastify": "^5.8.5"
+  }
+}
