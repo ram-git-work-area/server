@@ -15,7 +15,7 @@ import { NoopAuthNotificationProvider } from '../services/notification.provider'
 import { NoopAuthRateLimiter, RedisAuthRateLimiter } from '../services/rate-limiter.service';
 
 export async function authRoutes(app: FastifyInstance) {
-  const config = loadConfig({ serviceName: 'auth-service', defaultPort: 3001 });
+  const config = loadConfig({ serviceName: 'auth-service', defaultPort: 3002 });
   const repository = new AuthRepository(
     app.hasDecorator('postgres') ? app.postgres : createPostgresClient(),
   );

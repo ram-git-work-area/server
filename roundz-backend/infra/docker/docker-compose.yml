@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: roundz
-      POSTGRES_USER: roundz
-      POSTGRES_PASSWORD: roundz
+      POSTGRES_DB: admin
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     ports:
       - '5432:5432'
     volumes:
