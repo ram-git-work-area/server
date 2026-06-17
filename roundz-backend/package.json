@@ -13,7 +13,9 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build:packages && npm run build:apps",
+    "build:packages": "npm run build --workspace @roundz/common && npm run build --workspace @roundz/config && npm run build --workspace @roundz/logger && npm run build --workspace @roundz/errors && npm run build --workspace @roundz/validation && npm run build --workspace @roundz/database && npm run build --workspace @roundz/kafka && npm run build --workspace @roundz/redis && npm run build --workspace @roundz/auth && npm run build --workspace @roundz/cloud",
+    "build:apps": "npm run build --workspace @roundz/api-gateway && npm run build --workspace @roundz/auth-service && npm run build --workspace @roundz/user-service && npm run build --workspace @roundz/rider-service && npm run build --workspace @roundz/trip-service && npm run build --workspace @roundz/wallet-service && npm run build --workspace @roundz/notification-service && npm run build --workspace @roundz/location-service && npm run build --workspace @roundz/admin-service",
     "clean": "rimraf \"apps/*/dist\" \"packages/*/dist\"",
     "dev:gateway": "tsx watch apps/api-gateway/src/server.ts",
     "dev:auth": "tsx watch apps/auth-service/src/server.ts",

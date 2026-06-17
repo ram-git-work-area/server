@@ -1,6 +1,6 @@
 import multipart from '@fastify/multipart';
 import type { FastifyInstance } from 'fastify';
-import { jwtAuthPlugin, roleGuard } from '@roundz/auth';
+import { authenticateJwt, roleGuard } from '@roundz/auth';
 import { createObjectStorageProvider, type ObjectStorageProvider } from '@roundz/cloud';
 import { loadConfig } from '@roundz/config';
 import { createPostgresClient } from '@roundz/database';
@@ -43,7 +43,8 @@ export async function userRoutes(app: FastifyInstance, options: UserRoutesOption
       files: 1,
     },
   });
-  await app.register(jwtAuthPlugin(config.jwtSecret));
+  app.decorateRequest('authUser', null);
+  app.addHook('preHandler', authenticateJwt(config.jwtSecret));
   app.addHook('preHandler', roleGuard(['CUSTOMER']));
 
   app.get('/users/profile', (request, reply) => controller.getProfile(request, reply));

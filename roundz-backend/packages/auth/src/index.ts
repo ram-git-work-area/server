@@ -115,15 +115,27 @@ export function roleGuard(allowedRoles: readonly AuthRole[]) {
   };
 }
 
+export function authenticateJwt(secret: string) {
+  return async (request: FastifyRequest, _reply: FastifyReply) => {
+    try {
+      const token = extractBearerToken(request);
+      request.authUser = verifyAccessToken(token, secret);
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
+      }
+
+      throw new AppError('Invalid access token', 401, 'AUTH_TOKEN_INVALID');
+    }
+  };
+}
+
 export const jwtAuthPlugin =
   (secret: string): FastifyPluginAsync =>
   async (app) => {
     app.decorateRequest('authUser', null);
 
-    app.addHook('preHandler', async (request) => {
-      const token = extractBearerToken(request);
-      request.authUser = verifyAccessToken(token, secret);
-    });
+    app.addHook('preHandler', authenticateJwt(secret));
   };
 
 declare module 'fastify' {
