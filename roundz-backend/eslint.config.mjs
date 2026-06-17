@@ -12,7 +12,7 @@ export default [
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['apps/auth-service/tests/*.ts'],
+          allowDefaultProject: ['apps/auth-service/tests/*.ts', 'apps/user-service/tests/*.ts'],
         },
         tsconfigRootDir: import.meta.dirname,
       },

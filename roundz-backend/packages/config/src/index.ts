@@ -31,6 +31,7 @@ const envSchema = z.object({
   AUTH_OTP_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(3),
   AUTH_OTP_RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().positive().default(3600),
   AUTH_OTP_TTL_SECONDS: z.coerce.number().int().positive().default(300),
+  USER_PROFILE_IMAGE_BUCKET: z.string().min(1).default('roundz-user-profile-images'),
   CLOUD_PROVIDER: z.enum(['aws', 'gcp', 'azure', 'local']).default('aws'),
   STORAGE_PROVIDER: z.enum(['s3', 'gcs', 'azure-blob', 'local']).default('s3'),
   PAYMENT_PROVIDER: z.enum(['razorpay', 'stripe', 'mock']).default('razorpay'),
@@ -62,6 +63,7 @@ export type RoundzConfig = {
   authOtpRateLimitMax: number;
   authOtpRateLimitWindowSeconds: number;
   authOtpTtlSeconds: number;
+  userProfileImageBucket: string;
   cloudProvider: CloudProvider;
   storageProvider: StorageProvider;
   paymentProvider: PaymentProvider;
@@ -101,6 +103,7 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
     authOtpRateLimitMax: parsed.AUTH_OTP_RATE_LIMIT_MAX,
     authOtpRateLimitWindowSeconds: parsed.AUTH_OTP_RATE_LIMIT_WINDOW_SECONDS,
     authOtpTtlSeconds: parsed.AUTH_OTP_TTL_SECONDS,
+    userProfileImageBucket: parsed.USER_PROFILE_IMAGE_BUCKET,
     cloudProvider: parsed.CLOUD_PROVIDER,
     storageProvider: parsed.STORAGE_PROVIDER,
     paymentProvider: parsed.PAYMENT_PROVIDER,
