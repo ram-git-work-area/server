@@ -39,7 +39,7 @@ services:
     container_name: roundz-kafka
     hostname: kafka
     ports:
-      - "9092:9092"
+      - '9092:9092'
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
@@ -52,9 +52,9 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
     volumes:
-    - kafka-data:/var/lib/kafka/data
+      - kafka-data:/var/lib/kafka/data
 
 volumes:
   postgres-data:

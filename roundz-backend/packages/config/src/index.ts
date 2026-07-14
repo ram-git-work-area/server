@@ -31,6 +31,24 @@ const envSchema = z.object({
   AUTH_OTP_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(3),
   AUTH_OTP_RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().positive().default(3600),
   AUTH_OTP_TTL_SECONDS: z.coerce.number().int().positive().default(300),
+  AUTH_SERVICE_URL: z.string().url().optional(),
+  USER_SERVICE_URL: z.string().url().optional(),
+  RIDER_SERVICE_URL: z.string().url().optional(),
+  TRIP_SERVICE_URL: z.string().url().optional(),
+  LOCATION_SERVICE_URL: z.string().url().optional(),
+  WALLET_SERVICE_URL: z.string().url().optional(),
+  NOTIFICATION_SERVICE_URL: z.string().url().optional(),
+  ADMIN_SERVICE_URL: z.string().url().optional(),
+  GATEWAY_REQUEST_TIMEOUT_MS: z.coerce.number().int().positive().default(15000),
+  GATEWAY_BODY_LIMIT_BYTES: z.coerce.number().int().positive().default(10485760),
+  GATEWAY_HEALTH_TIMEOUT_MS: z.coerce.number().int().positive().default(3000),
+  GATEWAY_GET_RETRY_ATTEMPTS: z.coerce.number().int().nonnegative().default(2),
+  GATEWAY_CIRCUIT_FAILURE_THRESHOLD: z.coerce.number().int().positive().default(5),
+  GATEWAY_CIRCUIT_OPEN_MS: z.coerce.number().int().positive().default(30000),
+  GATEWAY_RATE_LIMIT_IP_MAX: z.coerce.number().int().positive().default(1200),
+  GATEWAY_RATE_LIMIT_USER_MAX: z.coerce.number().int().positive().default(3000),
+  GATEWAY_RATE_LIMIT_ENDPOINT_MAX: z.coerce.number().int().positive().default(600),
+  GATEWAY_RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().positive().default(60),
   CLOUD_PROVIDER: z.enum(['aws', 'gcp', 'azure', 'local']).default('aws'),
   STORAGE_PROVIDER: z.enum(['s3', 'gcs', 'azure-blob', 'local']).default('s3'),
   PAYMENT_PROVIDER: z.enum(['razorpay', 'stripe', 'mock']).default('razorpay'),
@@ -62,6 +80,26 @@ export type RoundzConfig = {
   authOtpRateLimitMax: number;
   authOtpRateLimitWindowSeconds: number;
   authOtpTtlSeconds: number;
+  serviceUrls: {
+    auth?: string;
+    users?: string;
+    riders?: string;
+    trips?: string;
+    location?: string;
+    wallet?: string;
+    notifications?: string;
+    admin?: string;
+  };
+  gatewayRequestTimeoutMs: number;
+  gatewayBodyLimitBytes: number;
+  gatewayHealthTimeoutMs: number;
+  gatewayGetRetryAttempts: number;
+  gatewayCircuitFailureThreshold: number;
+  gatewayCircuitOpenMs: number;
+  gatewayRateLimitIpMax: number;
+  gatewayRateLimitUserMax: number;
+  gatewayRateLimitEndpointMax: number;
+  gatewayRateLimitWindowSeconds: number;
   cloudProvider: CloudProvider;
   storageProvider: StorageProvider;
   paymentProvider: PaymentProvider;
@@ -79,8 +117,7 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
 
   const parsed = envSchema.parse({
     ...process.env,
-    // PORT: process.env.PORT ?? options.defaultPort,
-    PORT: options.defaultPort,
+    PORT: process.env.PORT ?? options.defaultPort,
   });
 
   return {
@@ -102,6 +139,26 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
     authOtpRateLimitMax: parsed.AUTH_OTP_RATE_LIMIT_MAX,
     authOtpRateLimitWindowSeconds: parsed.AUTH_OTP_RATE_LIMIT_WINDOW_SECONDS,
     authOtpTtlSeconds: parsed.AUTH_OTP_TTL_SECONDS,
+    serviceUrls: {
+      auth: parsed.AUTH_SERVICE_URL,
+      users: parsed.USER_SERVICE_URL,
+      riders: parsed.RIDER_SERVICE_URL,
+      trips: parsed.TRIP_SERVICE_URL,
+      location: parsed.LOCATION_SERVICE_URL,
+      wallet: parsed.WALLET_SERVICE_URL,
+      notifications: parsed.NOTIFICATION_SERVICE_URL,
+      admin: parsed.ADMIN_SERVICE_URL,
+    },
+    gatewayRequestTimeoutMs: parsed.GATEWAY_REQUEST_TIMEOUT_MS,
+    gatewayBodyLimitBytes: parsed.GATEWAY_BODY_LIMIT_BYTES,
+    gatewayHealthTimeoutMs: parsed.GATEWAY_HEALTH_TIMEOUT_MS,
+    gatewayGetRetryAttempts: parsed.GATEWAY_GET_RETRY_ATTEMPTS,
+    gatewayCircuitFailureThreshold: parsed.GATEWAY_CIRCUIT_FAILURE_THRESHOLD,
+    gatewayCircuitOpenMs: parsed.GATEWAY_CIRCUIT_OPEN_MS,
+    gatewayRateLimitIpMax: parsed.GATEWAY_RATE_LIMIT_IP_MAX,
+    gatewayRateLimitUserMax: parsed.GATEWAY_RATE_LIMIT_USER_MAX,
+    gatewayRateLimitEndpointMax: parsed.GATEWAY_RATE_LIMIT_ENDPOINT_MAX,
+    gatewayRateLimitWindowSeconds: parsed.GATEWAY_RATE_LIMIT_WINDOW_SECONDS,
     cloudProvider: parsed.CLOUD_PROVIDER,
     storageProvider: parsed.STORAGE_PROVIDER,
     paymentProvider: parsed.PAYMENT_PROVIDER,
