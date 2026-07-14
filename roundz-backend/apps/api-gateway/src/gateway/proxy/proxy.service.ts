@@ -3,7 +3,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AppError } from '@roundz/errors';
 import type { RoundzConfig } from '@roundz/config';
 import type { GatewayRoute } from '../config/route-registry';
-import { RouteRegistry } from '../config/route-registry';
+import type { RouteRegistry } from '../config/route-registry';
 import type { ProxyRegistry, ProxyTarget } from './proxy-registry';
 import type { GatewayMetrics } from '../utils/metrics';
 

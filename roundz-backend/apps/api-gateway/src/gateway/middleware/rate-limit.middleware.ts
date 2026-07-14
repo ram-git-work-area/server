@@ -1,4 +1,4 @@
-import type { FastifyPluginAsync } from 'fastify';
+import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import { AppError } from '@roundz/errors';
 import type { RoundzConfig } from '@roundz/config';
 
@@ -48,51 +48,55 @@ export type RateLimitMiddlewareOptions = {
 };
 
 export class RateLimitMiddleware {
-  static plugin(options: RateLimitMiddlewareOptions): FastifyPluginAsync {
-    return async (app) => {
-      const store = options.redis
-        ? new RedisRateLimitStore(options.redis)
-        : new MemoryRateLimitStore();
+  static async register(app: FastifyInstance, options: RateLimitMiddlewareOptions) {
+    const store = options.redis
+      ? new RedisRateLimitStore(options.redis)
+      : new MemoryRateLimitStore();
 
-      if (!options.redis) {
-        app.log.warn('gateway Redis rate limiting is using in-memory fallback');
+    if (!options.redis) {
+      app.log.warn('gateway Redis rate limiting is using in-memory fallback');
+    }
+
+    app.addHook('preHandler', async (request) => {
+      if (!request.url.startsWith('/api/')) {
+        return;
       }
 
-      app.addHook('preHandler', async (request) => {
-        if (!request.url.startsWith('/api/')) {
-          return;
+      const endpointKey = normalizeEndpoint(request.url);
+      const checks = [
+        {
+          key: `gateway:rate:ip:${request.ip}`,
+          limit: options.config.gatewayRateLimitIpMax,
+        },
+        {
+          key: `gateway:rate:endpoint:${request.method}:${endpointKey}`,
+          limit: options.config.gatewayRateLimitEndpointMax,
+        },
+      ];
+
+      if (request.authUser) {
+        checks.push({
+          key: `gateway:rate:user:${request.authUser.sub}`,
+          limit: options.config.gatewayRateLimitUserMax,
+        });
+      }
+
+      for (const check of checks) {
+        const count = await store.increment(
+          check.key,
+          options.config.gatewayRateLimitWindowSeconds,
+        );
+
+        if (count > check.limit) {
+          throw new AppError('Too many requests', 429, 'GATEWAY_RATE_LIMITED');
         }
+      }
+    });
+  }
 
-        const endpointKey = normalizeEndpoint(request.url);
-        const checks = [
-          {
-            key: `gateway:rate:ip:${request.ip}`,
-            limit: options.config.gatewayRateLimitIpMax,
-          },
-          {
-            key: `gateway:rate:endpoint:${request.method}:${endpointKey}`,
-            limit: options.config.gatewayRateLimitEndpointMax,
-          },
-        ];
-
-        if (request.authUser) {
-          checks.push({
-            key: `gateway:rate:user:${request.authUser.sub}`,
-            limit: options.config.gatewayRateLimitUserMax,
-          });
-        }
-
-        for (const check of checks) {
-          const count = await store.increment(
-            check.key,
-            options.config.gatewayRateLimitWindowSeconds,
-          );
-
-          if (count > check.limit) {
-            throw new AppError('Too many requests', 429, 'GATEWAY_RATE_LIMITED');
-          }
-        }
-      });
+  static plugin(options: RateLimitMiddlewareOptions): FastifyPluginAsync {
+    return async (app) => {
+      await RateLimitMiddleware.register(app, options);
     };
   }
 }

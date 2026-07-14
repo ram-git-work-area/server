@@ -4,13 +4,12 @@ import { requestContextPlugin } from '@roundz/common';
 import { loadConfig } from '@roundz/config';
 import { createFastifyLoggerOptions } from '@roundz/logger';
 import { dependenciesPlugin } from './plugins/dependencies.plugin';
-import swagger from '@fastify/swagger';
-import swaggerUi from '@fastify/swagger-ui';
 import { RouteRegistry } from './gateway/config/route-registry';
 import { ErrorHandler } from './gateway/middleware/error-handler';
 import { GatewayMiddleware } from './gateway/middleware/gateway.middleware';
 import { ProxyRegistry } from './gateway/proxy/proxy-registry';
 import { ProxyService } from './gateway/proxy/proxy.service';
+import { docsRoutes } from './gateway/routes/docs.routes';
 import { gatewayHealthRoutes } from './gateway/routes/health.routes';
 import { metricsRoutes } from './gateway/routes/metrics.routes';
 import { proxyRoutes } from './gateway/routes/proxy.routes';
@@ -41,49 +40,8 @@ export async function buildApp() {
     { parseAs: 'buffer' },
     (_request, body, done) => done(null, body),
   );
-  await app.register(swagger, {
-    openapi: {
-      info: {
-        title: 'Roundz API Gateway',
-        description: 'Public API entry point for Roundz microservices.',
-        version: '0.1.0',
-      },
-      paths: {
-        '/api/auth/*': {
-          post: {
-            summary: 'Forward auth requests to Auth Service',
-          },
-        },
-        '/api/users/*': {
-          get: {
-            summary: 'Forward user requests to User Service',
-          },
-        },
-        '/health': {
-          get: {
-            summary: 'Gateway health check',
-          },
-        },
-        '/health/ready': {
-          get: {
-            summary: 'Gateway readiness check',
-          },
-        },
-        '/health/services': {
-          get: {
-            summary: 'Downstream service health checks',
-          },
-        },
-        '/metrics': {
-          get: {
-            summary: 'Prometheus metrics',
-          },
-        },
-      },
-    },
-  });
-  await app.register(swaggerUi, { routePrefix: '/docs' });
   await GatewayMiddleware.register(app, { config, routeRegistry });
+  await app.register(docsRoutes);
   await app.register(gatewayHealthRoutes, { config, routeRegistry, proxyRegistry });
   await app.register(metricsRoutes, { metrics });
   await app.register(proxyRoutes, { proxyService });

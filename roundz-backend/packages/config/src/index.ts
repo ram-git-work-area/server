@@ -1,6 +1,14 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
 
+const booleanFromEnv = z.preprocess((value) => {
+  if (typeof value === 'string') {
+    return ['1', 'true', 'yes', 'on'].includes(value.toLowerCase());
+  }
+
+  return value;
+}, z.boolean());
+
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'staging', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(3000),
@@ -53,7 +61,7 @@ const envSchema = z.object({
   STORAGE_PROVIDER: z.enum(['s3', 'gcs', 'azure-blob', 'local']).default('s3'),
   PAYMENT_PROVIDER: z.enum(['razorpay', 'stripe', 'mock']).default('razorpay'),
   PUSH_PROVIDER: z.enum(['fcm', 'mock']).default('fcm'),
-  ENABLE_EXTERNAL_CONNECTIONS: z.coerce.boolean().default(false),
+  ENABLE_EXTERNAL_CONNECTIONS: booleanFromEnv.default(false),
 });
 
 export type CloudProvider = z.infer<typeof envSchema>['CLOUD_PROVIDER'];

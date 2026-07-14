@@ -34,19 +34,15 @@ export class GatewayMiddleware {
       global: true,
       encodings: ['gzip', 'br'],
     });
-    await app.register(CorrelationMiddleware.plugin());
-    await app.register(RequestLogger.plugin());
-    await app.register(
-      AuthenticationMiddleware.plugin({
-        jwtSecret: options.config.jwtSecret,
-        routeRegistry: options.routeRegistry,
-      }),
-    );
-    await app.register(
-      RateLimitMiddleware.plugin({
-        config: options.config,
-        redis: app.hasDecorator('redis') ? app.redis : undefined,
-      }),
-    );
+    await CorrelationMiddleware.register(app);
+    await RequestLogger.register(app);
+    await AuthenticationMiddleware.register(app, {
+      jwtSecret: options.config.jwtSecret,
+      routeRegistry: options.routeRegistry,
+    });
+    await RateLimitMiddleware.register(app, {
+      config: options.config,
+      redis: app.hasDecorator('redis') ? app.redis : undefined,
+    });
   }
 }

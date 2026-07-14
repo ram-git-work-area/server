@@ -178,7 +178,7 @@ async function createGateway(env: NodeJS.ProcessEnv) {
   process.env = {
     ...originalEnv,
     NODE_ENV: 'test',
-    PORT: '0',
+    PORT: '3000',
     JWT_SECRET: jwtSecret,
     ENABLE_EXTERNAL_CONNECTIONS: 'false',
     GATEWAY_RATE_LIMIT_IP_MAX: '1000',
