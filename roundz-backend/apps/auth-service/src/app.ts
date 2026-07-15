@@ -9,7 +9,7 @@ import { healthRoutes } from './routes/health.routes';
 import { authRoutes } from './routes/auth.routes';
 
 export async function buildApp() {
-  const config = loadConfig({ serviceName: 'auth-service', defaultPort: 3002 });
+  const config = loadConfig({ serviceName: 'auth-service', defaultPort: 3001 });
   const app = Fastify({
     logger: createFastifyLoggerOptions(config.serviceName, config.logLevel),
     trustProxy: true,
