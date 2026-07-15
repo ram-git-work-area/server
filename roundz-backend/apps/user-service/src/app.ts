@@ -6,6 +6,7 @@ import { createFastifyLoggerOptions } from '@roundz/logger';
 import { dependenciesPlugin } from './plugins/dependencies.plugin';
 import { errorHandlerPlugin } from './plugins/error-handler.plugin';
 import { healthRoutes } from './routes/health.routes';
+import { userRoutes } from './routes/user.routes';
 
 export async function buildApp() {
   const config = loadConfig({ serviceName: 'user-service', defaultPort: 3002 });
@@ -23,6 +24,7 @@ export async function buildApp() {
     redisUrl: config.redisUrl,
   });
   await app.register(healthRoutes, { prefix: '/health' });
+  await app.register(userRoutes);
 
   return { app, config };
 }
