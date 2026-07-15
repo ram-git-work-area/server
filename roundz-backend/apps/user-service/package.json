@@ -9,9 +9,12 @@
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "clean": "rimraf dist",
-    "test": "echo \"No tests configured for @roundz/user-service yet\""
+    "test": "vitest run"
   },
   "dependencies": {
+    "@fastify/multipart": "^10.1.0",
+    "@roundz/auth": "*",
+    "@roundz/cloud": "*",
     "@roundz/common": "*",
     "@roundz/config": "*",
     "@roundz/database": "*",

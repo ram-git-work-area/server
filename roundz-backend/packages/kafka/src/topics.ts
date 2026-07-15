@@ -11,6 +11,14 @@ export const KafkaTopics = {
   AuthUserLoggedIn: 'auth.user_logged_in',
   AuthOtpRequested: 'auth.otp_requested',
   AuthPasswordChanged: 'auth.password_changed',
+  UserProfileUpdated: 'user.profile.updated',
+  UserAddressCreated: 'user.address.created',
+  UserAddressUpdated: 'user.address.updated',
+  UserAddressDeleted: 'user.address.deleted',
+  UserFavoriteCreated: 'user.favorite.created',
+  UserFavoriteUpdated: 'user.favorite.updated',
+  UserFavoriteDeleted: 'user.favorite.deleted',
+  UserSettingsUpdated: 'user.settings.updated',
 } as const;
 
 export type KafkaTopic = (typeof KafkaTopics)[keyof typeof KafkaTopics];
