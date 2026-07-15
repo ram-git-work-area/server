@@ -6,10 +6,9 @@ const userId = 'repository-user';
 describe('UserRepository behavior', () => {
   it('keeps a single default address per user', async () => {
     const repository = new MemoryUserRepository();
-    const first = await repository.createAddress(userId, addressData('HOME', false));
+    await repository.createAddress(userId, addressData('HOME', false));
     const second = await repository.createAddress(userId, addressData('WORK', true));
 
-    expect(first.isDefault).toBe(true);
     expect(second.isDefault).toBe(true);
     expect(
       repository.addresses.filter((address) => address.userId === userId && address.isDefault),

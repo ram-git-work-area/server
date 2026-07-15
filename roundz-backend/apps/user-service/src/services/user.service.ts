@@ -511,7 +511,7 @@ function sanitizeFileName(fileName: string) {
 function parseObjectUri(uri: string) {
   const match = /^([a-z][a-z0-9+.-]*):\/\/([^/]+)\/(.+)$/i.exec(uri);
 
-  if (!match) {
+  if (!match?.[2] || !match[3]) {
     return null;
   }
 

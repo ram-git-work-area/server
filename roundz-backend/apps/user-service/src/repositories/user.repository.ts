@@ -1,9 +1,9 @@
-import { Prisma } from '@prisma/client';
 import type {
   Address,
   AddressLabel,
   FavoriteLocation,
   Gender,
+  Prisma,
   PrismaClient,
   UserProfile,
   UserSettings,
