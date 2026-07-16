@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import type { PrismaClient } from '@prisma/client';
 import {
   connectMongo,
   connectPostgres,
@@ -6,6 +7,8 @@ import {
   disconnectPostgres,
 } from '@roundz/database';
 import { connectRedis, disconnectRedis } from '@roundz/redis';
+import type Redis from 'ioredis';
+import type { Connection } from 'mongoose';
 
 export type DependenciesPluginOptions = {
   enabled: boolean;
@@ -36,3 +39,11 @@ export const dependenciesPlugin: FastifyPluginAsync<DependenciesPluginOptions> =
     await disconnectPostgres();
   });
 };
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    postgres: PrismaClient;
+    mongo: Connection;
+    redis: Redis;
+  }
+}
