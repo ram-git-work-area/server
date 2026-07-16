@@ -9,9 +9,10 @@
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "clean": "rimraf dist",
-    "test": "echo \"No tests configured for @roundz/location-service yet\""
+    "test": "vitest run"
   },
   "dependencies": {
+    "@roundz/auth": "*",
     "@roundz/common": "*",
     "@roundz/config": "*",
     "@roundz/database": "*",
@@ -20,6 +21,7 @@
     "@roundz/logger": "*",
     "@roundz/redis": "*",
     "@roundz/validation": "*",
-    "fastify": "^5.8.5"
+    "fastify": "^5.8.5",
+    "mongoose": "^9.7.0"
   }
 }

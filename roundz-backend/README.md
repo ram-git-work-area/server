@@ -110,6 +110,7 @@ Implemented now:
 
 - Health and readiness endpoints in every service.
 - Auth login placeholder with JWT signing and Zod validation.
+- Location Service: high-throughput rider location updates (MongoDB), presence management with automatic offline sweeps, `2dsphere` nearby lookup, cursor-paginated GPS history, Redis current-location cache, and `location.*` Kafka events.
 - Kafka producer and consumer package plus sample trip/notification usage.
 - PostgreSQL/Prisma, MongoDB/Mongoose, and Redis connection helpers.
 - Object storage, secrets, push, payment, and maps provider interfaces with placeholder adapters.
