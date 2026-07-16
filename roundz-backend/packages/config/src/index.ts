@@ -41,6 +41,8 @@ const envSchema = z.object({
   AUTH_OTP_TTL_SECONDS: z.coerce.number().int().positive().default(300),
   USER_PROFILE_IMAGE_BUCKET: z.string().min(1).default('roundz-user-profile-images'),
   USER_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(300),
+  RIDER_DOCUMENT_BUCKET: z.string().min(1).default('roundz-rider-documents'),
+  RIDER_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(300),
   AUTH_SERVICE_URL: z.string().url().optional(),
   USER_SERVICE_URL: z.string().url().optional(),
   RIDER_SERVICE_URL: z.string().url().optional(),
@@ -92,6 +94,8 @@ export type RoundzConfig = {
   authOtpTtlSeconds: number;
   userProfileImageBucket: string;
   userCacheTtlSeconds: number;
+  riderDocumentBucket: string;
+  riderCacheTtlSeconds: number;
   serviceUrls: {
     auth?: string;
     users?: string;
@@ -153,6 +157,8 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
     authOtpTtlSeconds: parsed.AUTH_OTP_TTL_SECONDS,
     userProfileImageBucket: parsed.USER_PROFILE_IMAGE_BUCKET,
     userCacheTtlSeconds: parsed.USER_CACHE_TTL_SECONDS,
+    riderDocumentBucket: parsed.RIDER_DOCUMENT_BUCKET,
+    riderCacheTtlSeconds: parsed.RIDER_CACHE_TTL_SECONDS,
     serviceUrls: {
       auth: parsed.AUTH_SERVICE_URL,
       users: parsed.USER_SERVICE_URL,
