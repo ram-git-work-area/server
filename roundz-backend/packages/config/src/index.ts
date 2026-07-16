@@ -129,7 +129,8 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
 
   const parsed = envSchema.parse({
     ...process.env,
-    PORT: process.env.PORT ?? options.defaultPort,
+    // PORT: process.env.PORT ?? options.defaultPort,
+    PORT: options.defaultPort,
   });
 
   return {
