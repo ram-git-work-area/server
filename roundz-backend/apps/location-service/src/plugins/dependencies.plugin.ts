@@ -1,11 +1,8 @@
 import type { FastifyPluginAsync } from 'fastify';
-import {
-  connectMongo,
-  connectPostgres,
-  disconnectMongo,
-  disconnectPostgres,
-} from '@roundz/database';
+import { connectMongo, disconnectMongo } from '@roundz/database';
 import { connectRedis, disconnectRedis } from '@roundz/redis';
+import type Redis from 'ioredis';
+import type { Connection } from 'mongoose';
 
 export type DependenciesPluginOptions = {
   enabled: boolean;
@@ -22,17 +19,21 @@ export const dependenciesPlugin: FastifyPluginAsync<DependenciesPluginOptions> =
     return;
   }
 
-  const postgres = await connectPostgres();
   const mongo = await connectMongo(options.mongoUrl);
   const redis = await connectRedis(options.redisUrl);
 
-  app.decorate('postgres', postgres);
   app.decorate('mongo', mongo);
   app.decorate('redis', redis);
 
   app.addHook('onClose', async () => {
     await disconnectRedis(redis);
     await disconnectMongo();
-    await disconnectPostgres();
   });
 };
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    mongo: Connection;
+    redis: Redis;
+  }
+}
