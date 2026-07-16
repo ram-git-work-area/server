@@ -110,6 +110,7 @@ Implemented now:
 
 - Health and readiness endpoints in every service.
 - Auth login placeholder with JWT signing and Zod validation.
+- Rider Service: onboarding, profile, vehicle management, KYC document uploads (via `ObjectStorageProvider`), online/offline availability with an approval gate, preferences, Redis caching, and `rider.*` Kafka events.
 - Kafka producer and consumer package plus sample trip/notification usage.
 - PostgreSQL/Prisma, MongoDB/Mongoose, and Redis connection helpers.
 - Object storage, secrets, push, payment, and maps provider interfaces with placeholder adapters.
