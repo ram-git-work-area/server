@@ -1,0 +1,31 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Deployment environment
+        required: true
+        default: staging
+      cloud_provider:
+        description: aws, gcp, azure, or another supported provider
+        required: true
+        default: aws
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      CLOUD_PROVIDER: ${{ inputs.cloud_provider }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      KUBE_CONTEXT: ${{ vars.KUBE_CONTEXT }}
+      HELM_RELEASE_NAME: roundz-backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure cloud credentials placeholder
+        run: echo "Select credential setup based on CLOUD_PROVIDER without changing application code."
+      - name: Deploy placeholder
+        run: echo "Run terraform plan/apply and helm upgrade for $CLOUD_PROVIDER here."

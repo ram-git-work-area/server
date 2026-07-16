@@ -1,0 +1,15 @@
+{
+  "name": "@roundz/kafka",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rimraf dist",
+    "test": "echo \"No tests configured for @roundz/kafka yet\""
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  }
+}

@@ -1,0 +1,45 @@
+{{- range $name, $service := .Values.services }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $name }}
+    {{- include "roundz-backend.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ $service.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+    spec:
+      containers:
+        - name: {{ $name }}
+          image: "{{ $.Values.imageRegistry }}/{{ $name }}:latest"
+          ports:
+            - containerPort: {{ $service.port }}
+          env:
+            - name: PORT
+              value: "{{ $service.port }}"
+            - name: CLOUD_PROVIDER
+              value: "{{ $.Values.cloudProvider }}"
+            - name: STORAGE_PROVIDER
+              value: "{{ $.Values.storageProvider }}"
+            - name: PAYMENT_PROVIDER
+              value: "{{ $.Values.paymentProvider }}"
+            - name: PUSH_PROVIDER
+              value: "{{ $.Values.pushProvider }}"
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: {{ $service.port }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ $service.port }}
+---
+{{- end }}

@@ -1,0 +1,16 @@
+{
+  "name": "@roundz/database",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rimraf dist",
+    "test": "echo \"No tests configured for @roundz/database yet\""
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "mongoose": "^9.7.0"
+  }
+}

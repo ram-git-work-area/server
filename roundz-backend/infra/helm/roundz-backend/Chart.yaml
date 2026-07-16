@@ -1,0 +1,6 @@
+apiVersion: v2
+name: roundz-backend
+description: Helm chart scaffold for Roundz backend microservices
+type: application
+version: 0.1.0
+appVersion: '0.1.0'

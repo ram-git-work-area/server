@@ -1,0 +1,27 @@
+{
+  "name": "@roundz/auth-service",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/server.js",
+  "types": "dist/server.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
+    "clean": "rimraf dist",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@roundz/auth": "*",
+    "@roundz/common": "*",
+    "@roundz/config": "*",
+    "@roundz/database": "*",
+    "@roundz/errors": "*",
+    "@roundz/kafka": "*",
+    "@roundz/logger": "*",
+    "@roundz/redis": "*",
+    "@roundz/validation": "*",
+    "argon2": "^0.44.0",
+    "fastify": "^5.8.5"
+  }
+}
