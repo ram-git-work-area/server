@@ -41,6 +41,17 @@ const envSchema = z.object({
   AUTH_OTP_TTL_SECONDS: z.coerce.number().int().positive().default(300),
   USER_PROFILE_IMAGE_BUCKET: z.string().min(1).default('roundz-user-profile-images'),
   USER_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(300),
+  LOCATION_MAX_SPEED_MPS: z.coerce.number().positive().default(90),
+  LOCATION_DUPLICATE_EPSILON_METERS: z.coerce.number().nonnegative().default(2),
+  LOCATION_PRESENCE_TIMEOUT_SECONDS: z.coerce.number().int().positive().default(30),
+  LOCATION_PRESENCE_SWEEP_INTERVAL_SECONDS: z.coerce.number().int().positive().default(15),
+  LOCATION_CURRENT_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(10),
+  LOCATION_HISTORY_BATCH_SIZE: z.coerce.number().int().positive().default(100),
+  LOCATION_HISTORY_FLUSH_INTERVAL_MS: z.coerce.number().int().positive().default(2000),
+  LOCATION_HISTORY_RETENTION_DAYS: z.coerce.number().int().nonnegative().default(0),
+  LOCATION_CURRENT_RETENTION_DAYS: z.coerce.number().int().nonnegative().default(0),
+  LOCATION_NEARBY_MAX_RADIUS_METERS: z.coerce.number().int().positive().default(50000),
+  LOCATION_NEARBY_DEFAULT_LIMIT: z.coerce.number().int().positive().max(500).default(50),
   AUTH_SERVICE_URL: z.string().url().optional(),
   USER_SERVICE_URL: z.string().url().optional(),
   RIDER_SERVICE_URL: z.string().url().optional(),
@@ -92,6 +103,17 @@ export type RoundzConfig = {
   authOtpTtlSeconds: number;
   userProfileImageBucket: string;
   userCacheTtlSeconds: number;
+  locationMaxSpeedMps: number;
+  locationDuplicateEpsilonMeters: number;
+  locationPresenceTimeoutSeconds: number;
+  locationPresenceSweepIntervalSeconds: number;
+  locationCurrentCacheTtlSeconds: number;
+  locationHistoryBatchSize: number;
+  locationHistoryFlushIntervalMs: number;
+  locationHistoryRetentionDays: number;
+  locationCurrentRetentionDays: number;
+  locationNearbyMaxRadiusMeters: number;
+  locationNearbyDefaultLimit: number;
   serviceUrls: {
     auth?: string;
     users?: string;
@@ -154,6 +176,17 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
     authOtpTtlSeconds: parsed.AUTH_OTP_TTL_SECONDS,
     userProfileImageBucket: parsed.USER_PROFILE_IMAGE_BUCKET,
     userCacheTtlSeconds: parsed.USER_CACHE_TTL_SECONDS,
+    locationMaxSpeedMps: parsed.LOCATION_MAX_SPEED_MPS,
+    locationDuplicateEpsilonMeters: parsed.LOCATION_DUPLICATE_EPSILON_METERS,
+    locationPresenceTimeoutSeconds: parsed.LOCATION_PRESENCE_TIMEOUT_SECONDS,
+    locationPresenceSweepIntervalSeconds: parsed.LOCATION_PRESENCE_SWEEP_INTERVAL_SECONDS,
+    locationCurrentCacheTtlSeconds: parsed.LOCATION_CURRENT_CACHE_TTL_SECONDS,
+    locationHistoryBatchSize: parsed.LOCATION_HISTORY_BATCH_SIZE,
+    locationHistoryFlushIntervalMs: parsed.LOCATION_HISTORY_FLUSH_INTERVAL_MS,
+    locationHistoryRetentionDays: parsed.LOCATION_HISTORY_RETENTION_DAYS,
+    locationCurrentRetentionDays: parsed.LOCATION_CURRENT_RETENTION_DAYS,
+    locationNearbyMaxRadiusMeters: parsed.LOCATION_NEARBY_MAX_RADIUS_METERS,
+    locationNearbyDefaultLimit: parsed.LOCATION_NEARBY_DEFAULT_LIMIT,
     serviceUrls: {
       auth: parsed.AUTH_SERVICE_URL,
       users: parsed.USER_SERVICE_URL,

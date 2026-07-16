@@ -19,6 +19,11 @@ export const KafkaTopics = {
   UserFavoriteUpdated: 'user.favorite.updated',
   UserFavoriteDeleted: 'user.favorite.deleted',
   UserSettingsUpdated: 'user.settings.updated',
+  LocationUpdated: 'location.updated',
+  LocationOnline: 'location.online',
+  LocationOffline: 'location.offline',
+  LocationHeartbeat: 'location.heartbeat',
+  LocationStale: 'location.stale',
 } as const;
 
 export type KafkaTopic = (typeof KafkaTopics)[keyof typeof KafkaTopics];
