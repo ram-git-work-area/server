@@ -16,6 +16,7 @@ export default [
             'apps/auth-service/tests/*.ts',
             'apps/user-service/tests/*.ts',
             'apps/trip-service/tests/*.ts',
+            'apps/trip-service/tests/matching/*.ts',
             'apps/api-gateway/tests/*.ts',
           ],
           maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 100,
