@@ -83,13 +83,13 @@ Every active state can also transition to `CANCELLED` or `FAILED`. `COMPLETED`, 
 
 All endpoints require a JWT and use the shared `{ "data": ... }` envelope.
 
-| Method & path              | Roles                              | Purpose |
-| -------------------------- | ---------------------------------- | ------- |
-| `POST /trips`              | `CUSTOMER`                         | Create a trip (status `REQUESTED`; no rider assigned yet) |
-| `GET /trips/:id`           | `CUSTOMER` (owner) / `ADMIN` / `SUPPORT` | Trip details |
-| `GET /trips`               | `CUSTOMER`                         | List own trips (cursor pagination, status/date filters) |
-| `PATCH /trips/:id/cancel`  | `CUSTOMER` (owner)                 | Customer cancellation |
-| `PATCH /trips/:id/status`  | `ADMIN` / `SUPPORT` / service token | Internal state transition (future services) |
+| Method & path             | Roles                                    | Purpose                                                   |
+| ------------------------- | ---------------------------------------- | --------------------------------------------------------- |
+| `POST /trips`             | `CUSTOMER`                               | Create a trip (status `REQUESTED`; no rider assigned yet) |
+| `GET /trips/:id`          | `CUSTOMER` (owner) / `ADMIN` / `SUPPORT` | Trip details                                              |
+| `GET /trips`              | `CUSTOMER`                               | List own trips (cursor pagination, status/date filters)   |
+| `PATCH /trips/:id/cancel` | `CUSTOMER` (owner)                       | Customer cancellation                                     |
+| `PATCH /trips/:id/status` | `ADMIN` / `SUPPORT` / service token      | Internal state transition (future services)               |
 
 ### `POST /trips`
 
@@ -113,7 +113,15 @@ All endpoints require a JWT and use the shared `{ "data": ... }` envelope.
 Response `201`:
 
 ```json
-{ "data": { "id": "...", "tripNumber": "TRP-20260717-AB12CD34", "status": "REQUESTED", "customerId": "...", "riderId": null } }
+{
+  "data": {
+    "id": "...",
+    "tripNumber": "TRP-20260717-AB12CD34",
+    "status": "REQUESTED",
+    "customerId": "...",
+    "riderId": null
+  }
+}
 ```
 
 ### `GET /trips`
@@ -137,12 +145,12 @@ Response `201`:
 Defined centrally in `packages/kafka/src/topics.ts`. Each payload carries `tripId`, `customerId`,
 `requestId`, and `traceId`.
 
-| Topic                  | Emitted when |
-| ---------------------- | ------------ |
-| `trip.created`         | A trip is created |
-| `trip.search.started`  | Status transitions to `SEARCHING_RIDER` |
-| `trip.status.changed`  | Any status transition |
-| `trip.cancelled`       | A trip is cancelled |
+| Topic                 | Emitted when                            |
+| --------------------- | --------------------------------------- |
+| `trip.created`        | A trip is created                       |
+| `trip.search.started` | Status transitions to `SEARCHING_RIDER` |
+| `trip.status.changed` | Any status transition                   |
+| `trip.cancelled`      | A trip is cancelled                     |
 
 Consumed later by the Matching Engine, Notification Service, Wallet Service, and Analytics.
 
@@ -166,13 +174,13 @@ PostgreSQL, so the service runs with a Noop cache when Redis is unavailable.
 
 ## Environment variables
 
-| Variable | Default | Description |
-| -------- | ------- | ----------- |
-| `PORT` | `3004` | HTTP port |
-| `DATABASE_URL` / `REDIS_URL` / `KAFKA_BROKERS` | shared | Infra connections |
-| `JWT_SECRET` | shared | Access-token verification |
-| `TRIP_CACHE_TTL_SECONDS` | `120` | Trip/active-trip cache TTL |
-| `ENABLE_EXTERNAL_CONNECTIONS` | `false` | Toggles real DB/Redis/Kafka wiring |
+| Variable                                       | Default | Description                        |
+| ---------------------------------------------- | ------- | ---------------------------------- |
+| `PORT`                                         | `3004`  | HTTP port                          |
+| `DATABASE_URL` / `REDIS_URL` / `KAFKA_BROKERS` | shared  | Infra connections                  |
+| `JWT_SECRET`                                   | shared  | Access-token verification          |
+| `TRIP_CACHE_TTL_SECONDS`                       | `120`   | Trip/active-trip cache TTL         |
+| `ENABLE_EXTERNAL_CONNECTIONS`                  | `false` | Toggles real DB/Redis/Kafka wiring |
 
 ## Testing
 
