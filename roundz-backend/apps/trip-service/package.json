@@ -9,9 +9,10 @@
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "clean": "rimraf dist",
-    "test": "echo \"No tests configured for @roundz/trip-service yet\""
+    "test": "vitest run"
   },
   "dependencies": {
+    "@roundz/auth": "*",
     "@roundz/common": "*",
     "@roundz/config": "*",
     "@roundz/database": "*",

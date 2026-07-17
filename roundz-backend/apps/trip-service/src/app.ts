@@ -6,7 +6,7 @@ import { createFastifyLoggerOptions } from '@roundz/logger';
 import { dependenciesPlugin } from './plugins/dependencies.plugin';
 import { errorHandlerPlugin } from './plugins/error-handler.plugin';
 import { healthRoutes } from './routes/health.routes';
-import { TripEventsService } from './services/trip-events.service';
+import { tripRoutes } from './routes/trip.routes';
 
 export async function buildApp() {
   const config = loadConfig({ serviceName: 'trip-service', defaultPort: 3004 });
@@ -20,11 +20,10 @@ export async function buildApp() {
   await app.register(errorHandlerPlugin);
   await app.register(dependenciesPlugin, {
     enabled: config.enableExternalConnections,
-    mongoUrl: config.mongoUrl,
     redisUrl: config.redisUrl,
   });
   await app.register(healthRoutes, { prefix: '/health' });
-  app.decorate('tripEventsService', new TripEventsService(config.kafkaBrokers));
+  await app.register(tripRoutes);
 
   return { app, config };
 }
