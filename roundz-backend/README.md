@@ -110,6 +110,7 @@ Implemented now:
 
 - Health and readiness endpoints in every service.
 - Auth login placeholder with JWT signing and Zod validation.
+- Trip Service (Phase 1 foundation): trip creation, strict lifecycle state machine, timeline auditing, customer + internal APIs, single-active-trip enforcement, Redis caching, and `trip.*` Kafka events.
 - Kafka producer and consumer package plus sample trip/notification usage.
 - PostgreSQL/Prisma, MongoDB/Mongoose, and Redis connection helpers.
 - Object storage, secrets, push, payment, and maps provider interfaces with placeholder adapters.
