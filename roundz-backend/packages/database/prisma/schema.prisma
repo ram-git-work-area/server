@@ -41,6 +41,46 @@ enum AddressLabel {
   OTHER
 }
 
+enum TripVehicleType {
+  BIKE
+  AUTO
+  CAR
+  SUV
+  VAN
+  TRUCK
+}
+
+enum TripType {
+  RIDE
+  DELIVERY
+}
+
+enum TripStatus {
+  REQUESTED
+  SEARCHING_RIDER
+  RIDER_ASSIGNED
+  RIDER_ARRIVING
+  OTP_PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  FAILED
+}
+
+enum TripPaymentMethod {
+  CASH
+  WALLET
+  CARD
+  UPI
+}
+
+enum TripCancelledBy {
+  CUSTOMER
+  RIDER
+  SYSTEM
+  ADMIN
+}
+
 model User {
   id            String      @id @default(uuid())
   email         String?     @unique
@@ -141,6 +181,51 @@ model UserSettings {
 
   @@index([language])
   @@index([timezone])
+}
+
+model Trip {
+  id                String            @id @default(uuid())
+  tripNumber        String            @unique
+  customerId        String
+  riderId           String?
+  vehicleType       TripVehicleType
+  tripType          TripType          @default(RIDE)
+  status            TripStatus        @default(REQUESTED)
+  pickupLatitude    Float
+  pickupLongitude   Float
+  pickupAddress     String
+  dropLatitude      Float
+  dropLongitude     Float
+  dropAddress       String
+  estimatedDistance Float
+  estimatedDuration Int
+  estimatedFare     Float
+  actualFare        Float?
+  paymentMethod     TripPaymentMethod
+  cancellationReason String?
+  cancelledBy       TripCancelledBy?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  timeline TripTimeline[]
+
+  @@index([customerId, status])
+  @@index([customerId, createdAt])
+  @@index([riderId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model TripTimeline {
+  id          String     @id @default(uuid())
+  tripId      String
+  status      TripStatus
+  description String
+  createdAt   DateTime   @default(now())
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId, createdAt])
 }
 
 model RefreshToken {
