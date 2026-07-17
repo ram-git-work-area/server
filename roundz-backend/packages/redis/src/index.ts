@@ -1,5 +1,7 @@
 import Redis from 'ioredis';
 
+export * from './lock';
+
 export function createRedisClient(redisUrl: string) {
   return new Redis(redisUrl, {
     maxRetriesPerRequest: 3,

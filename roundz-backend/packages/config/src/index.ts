@@ -42,6 +42,28 @@ const envSchema = z.object({
   USER_PROFILE_IMAGE_BUCKET: z.string().min(1).default('roundz-user-profile-images'),
   USER_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(300),
   TRIP_CACHE_TTL_SECONDS: z.coerce.number().int().positive().default(120),
+  MATCHING_STRATEGY: z
+    .enum(['nearest', 'highest_rated', 'least_busy', 'hybrid'])
+    .default('nearest'),
+  MATCHING_SEARCH_RADII_METERS: z
+    .string()
+    .min(1)
+    .default('2000,5000,10000')
+    .transform((value) =>
+      value
+        .split(',')
+        .map((radius) => Number.parseInt(radius.trim(), 10))
+        .filter((radius) => Number.isFinite(radius) && radius > 0),
+    )
+    .refine((radii) => radii.length > 0, {
+      message: 'MATCHING_SEARCH_RADII_METERS must contain at least one positive integer',
+    }),
+  MATCHING_BATCH_SIZE: z.coerce.number().int().positive().max(50).default(5),
+  MATCHING_DISPATCH_TIMEOUT_SECONDS: z.coerce.number().int().positive().max(120).default(15),
+  MATCHING_SESSION_TTL_SECONDS: z.coerce.number().int().positive().default(180),
+  MATCHING_LOCK_TTL_SECONDS: z.coerce.number().int().positive().default(30),
+  MATCHING_RIDER_AVAILABILITY_TTL_SECONDS: z.coerce.number().int().positive().default(30),
+  MATCHING_MAX_CANDIDATES_PER_RADIUS: z.coerce.number().int().positive().max(500).default(50),
   AUTH_SERVICE_URL: z.string().url().optional(),
   USER_SERVICE_URL: z.string().url().optional(),
   RIDER_SERVICE_URL: z.string().url().optional(),
@@ -67,6 +89,7 @@ const envSchema = z.object({
   ENABLE_EXTERNAL_CONNECTIONS: booleanFromEnv.default(false),
 });
 
+export type MatchingStrategyName = z.infer<typeof envSchema>['MATCHING_STRATEGY'];
 export type CloudProvider = z.infer<typeof envSchema>['CLOUD_PROVIDER'];
 export type StorageProvider = z.infer<typeof envSchema>['STORAGE_PROVIDER'];
 export type PaymentProvider = z.infer<typeof envSchema>['PAYMENT_PROVIDER'];
@@ -94,6 +117,16 @@ export type RoundzConfig = {
   userProfileImageBucket: string;
   userCacheTtlSeconds: number;
   tripCacheTtlSeconds: number;
+  matching: {
+    strategy: MatchingStrategyName;
+    searchRadiiMeters: number[];
+    batchSize: number;
+    dispatchTimeoutSeconds: number;
+    sessionTtlSeconds: number;
+    lockTtlSeconds: number;
+    riderAvailabilityTtlSeconds: number;
+    maxCandidatesPerRadius: number;
+  };
   serviceUrls: {
     auth?: string;
     users?: string;
@@ -157,6 +190,16 @@ export function loadConfig(options: LoadConfigOptions): RoundzConfig {
     userProfileImageBucket: parsed.USER_PROFILE_IMAGE_BUCKET,
     userCacheTtlSeconds: parsed.USER_CACHE_TTL_SECONDS,
     tripCacheTtlSeconds: parsed.TRIP_CACHE_TTL_SECONDS,
+    matching: {
+      strategy: parsed.MATCHING_STRATEGY,
+      searchRadiiMeters: parsed.MATCHING_SEARCH_RADII_METERS,
+      batchSize: parsed.MATCHING_BATCH_SIZE,
+      dispatchTimeoutSeconds: parsed.MATCHING_DISPATCH_TIMEOUT_SECONDS,
+      sessionTtlSeconds: parsed.MATCHING_SESSION_TTL_SECONDS,
+      lockTtlSeconds: parsed.MATCHING_LOCK_TTL_SECONDS,
+      riderAvailabilityTtlSeconds: parsed.MATCHING_RIDER_AVAILABILITY_TTL_SECONDS,
+      maxCandidatesPerRadius: parsed.MATCHING_MAX_CANDIDATES_PER_RADIUS,
+    },
     serviceUrls: {
       auth: parsed.AUTH_SERVICE_URL,
       users: parsed.USER_SERVICE_URL,
