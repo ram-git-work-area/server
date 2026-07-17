@@ -28,6 +28,18 @@ export class KafkaConsumerClient {
     await this.consumer.run({ eachMessage: handler });
   }
 
+  /**
+   * Subscribes to several topics and starts a single consumer run loop. kafkajs
+   * only allows `run` to be called once, so multi-topic consumers must subscribe
+   * to every topic before running.
+   */
+  async subscribeMany(topics: string[], handler: MessageHandler, fromBeginning = false) {
+    for (const topic of topics) {
+      await this.consumer.subscribe({ topic, fromBeginning });
+    }
+    await this.consumer.run({ eachMessage: handler });
+  }
+
   async disconnect() {
     await this.consumer.disconnect();
   }

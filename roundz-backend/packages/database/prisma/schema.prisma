@@ -81,6 +81,15 @@ enum TripCancelledBy {
   ADMIN
 }
 
+enum MatchingSessionStatus {
+  SEARCHING
+  DISPATCHING
+  ASSIGNED
+  FAILED
+  EXPIRED
+  CANCELLED
+}
+
 model User {
   id            String      @id @default(uuid())
   email         String?     @unique
@@ -226,6 +235,30 @@ model TripTimeline {
   trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
   @@index([tripId, createdAt])
+}
+
+model MatchingSession {
+  id                  String                @id @default(uuid())
+  tripId              String                @unique
+  status              MatchingSessionStatus @default(SEARCHING)
+  strategy            String
+  vehicleType         TripVehicleType
+  pickupLatitude      Float
+  pickupLongitude     Float
+  currentRadiusMeters Int
+  maxRadiusMeters     Int
+  currentBatch        Int                   @default(0)
+  notifiedRiderCount  Int                   @default(0)
+  assignedRiderId     String?
+  failureReason       String?
+  startedAt           DateTime              @default(now())
+  expiresAt           DateTime
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+
+  @@index([status])
+  @@index([status, expiresAt])
+  @@index([assignedRiderId])
 }
 
 model RefreshToken {
